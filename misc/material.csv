@@ -1,0 +1,34 @@
+id|type|name|tooltip|-comment
+timemarker||Time Marker|
+supply_buttons||Supply|
+pbutton|pbutton|Button|
+pbutton@t2|pbutton|Eyeball|
+market|{'sort'=>'token_state','loc'=>1}|Patch market
+token_neutral|{'w'=>1,'h'=>1}|Neutral Token|
+tile_special7x7||Special Tile|The first player to completely fill a 7x7 square of spaces on his quilt board receives this special tile, which is worth 7 buttons at the end of the game.
+tile_special7x7@t2||Special Tile|The first player to completely fill a 7x7 square of spaces on his quilt board receives this special tile, which is worth 7 eyeballs at the end of the game.
+timetracker|timetracker|
+timetracker_5|timetracker {'income'=>1}|
+timetracker_11|timetracker {'income'=>1}|
+timetracker_17|timetracker {'income'=>1}|
+timetracker_23|timetracker {'income'=>1}|
+timetracker_25|timetracker|
+timetracker_26|timetracker {'patch'=>1,'patch_o'=>1}|
+timetracker_29|timetracker {'income'=>1}|
+timetracker_32|timetracker {'patch'=>1,'patch_o'=>1}|
+timetracker_35|timetracker {'income'=>1}|
+timetracker_38|timetracker {'patch'=>1,'patch_o'=>1}|
+timetracker_41|timetracker {'income'=>1}|
+timetracker_44|timetracker {'patch'=>1,'patch_o'=>1}|
+timetracker_47|timetracker {'income'=>1}|
+timetracker_50|timetracker {'patch'=>1,'patch_o'=>1}|
+timetracker_53|timetracker {'income'=>1}|
+rotate_control|rotate-image control-image control-node drop-zone|Rotate Left|
+flip_control|mirror-image control-image control-node drop-zone|Flip|
+done_control|done-image control-image control-node|Confirm Placement|Click to confirm
+cancel_control|cancel-image control-image control-node|Cancel Placement|Click to cancel
+empties||Empties Counter|Counter for remaining empty spaces. You will get 2 point penalty at the end of game per empty space.
+buttons||Buttons Counter|Counter for buttons. You need buttons to buy patches. You will get 1 point for every button at the end of the game.<p> The smaller number is current button income.
+time||Time Counter|Counter for remaining time. You need time to buy patches or buttons. When your time runs out you game is over.
+buttons@t2||Eyeball Counter|Counter for eyeballs. You need eyeballs to buy patches. You will get 1 point for every eyeballs at the end of the game.<p> The smaller number is current eyeballs income.
+time@t2||Time Counter|Counter for remaining time. You need time to buy patches or eyeballs. When your time runs out you game is over.
