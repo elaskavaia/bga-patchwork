@@ -14,12 +14,12 @@
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *
  */
-
+/// <reference path="./bga-framework.d.ts" />
 const CELL_WIDTH = 42;
 
 class PatchManager {
   constructor(game) {
-    console.log("patch manager constructor");
+    console.log("patch manager constructor");  
   }
 
   // on click hooks
@@ -628,14 +628,18 @@ define([
   g_gamethemeurl + "/modules/sharedparent.js", // custom module
   g_gamethemeurl + "/modules/extscrollmap.js",
 ], function (dojo, declare) {
-  return declare("bgagame.patchwork", bgagame.sharedparent, {
+
+ 
+  /**
+   * @type {GameGui}
+   */
+  const mygame = {
     constructor: function () {
       this.pm = new PatchManager(this);
     },
     // setup hooks
     setup: function (gamedatas) {
       console.log("Starting game setup", gamedatas);
-
       this.onScreenWidthChange();
       var html = document.querySelector("html");
       if (gamedatas.variants["theme_variant"] == 0) {
@@ -1435,6 +1439,7 @@ define([
     setupPreference: function () {
       // Extract the ID and value from the UI control
       var _this = this;
+      
       function onchange(e) {
         var match = e.target.id.match(/^preference_[cf]ontrol_(\d+)$/);
         if (!match) {
@@ -1570,5 +1575,8 @@ define([
         };
       }
     },
-  });
-});
+  }
+   return declare("bgagame.patchwork", bgagame.sharedparent, mygame);
+}
+
+);
