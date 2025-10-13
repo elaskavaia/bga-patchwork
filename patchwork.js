@@ -19,7 +19,7 @@ const CELL_WIDTH = 42;
 
 class PatchManager {
   constructor(game) {
-    console.log("patch manager constructor");  
+    console.log("patch manager constructor");
   }
 
   // on click hooks
@@ -628,11 +628,7 @@ define([
   g_gamethemeurl + "/modules/sharedparent.js", // custom module
   g_gamethemeurl + "/modules/extscrollmap.js",
 ], function (dojo, declare) {
-
- 
-  /**
-   * @type {GameGui}
-   */
+  /**  @type {GameGui} */
   const mygame = {
     constructor: function () {
       this.pm = new PatchManager(this);
@@ -1170,6 +1166,7 @@ define([
         "blue",
         _("Pay time to receive buttons")
       );
+      this.addUndoButton();
     },
 
     onUpdateActionButtons_playerPatchOne: function (args) {
@@ -1260,6 +1257,7 @@ define([
         this.addDoneButton(_("Confirm"), "onDone");
       }
       this.addCancelButton();
+      this.addUndoButton();
     },
 
     // debug state
@@ -1439,7 +1437,7 @@ define([
     setupPreference: function () {
       // Extract the ID and value from the UI control
       var _this = this;
-      
+
       function onchange(e) {
         var match = e.target.id.match(/^preference_[cf]ontrol_(\d+)$/);
         if (!match) {
@@ -1575,8 +1573,6 @@ define([
         };
       }
     },
-  }
-   return declare("bgagame.patchwork", bgagame.sharedparent, mygame);
-}
-
-);
+  };
+  return declare("bgagame.patchwork", bgagame.sharedparent, mygame);
+});

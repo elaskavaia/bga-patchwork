@@ -290,6 +290,7 @@ abstract class APP_Extended extends Table {
         $this->incStat(1, 'turns_number', $next_player_id);
         $this->incStat(1, 'turns_number');
         $this->gamestate->changeActivePlayer($next_player_id);
+        $this->undoSavepoint();
     }
 
     // ------ DB ----------

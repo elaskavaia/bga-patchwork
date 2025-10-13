@@ -145,14 +145,6 @@ $gameinfos = array(
 //  IMPORTANT: it is mandatory that the FIRST tag is 1, 2, 3 and 4 (= game category)
 'tags' => array( 2, 11, 30, 206 ),
 
+"db_undo_support" => true
 
-//////// BGA SANDBOX ONLY PARAMETERS (DO NOT MODIFY)
-
-// simple : A plays, B plays, C plays, A plays, B plays, ...
-// circuit : A plays and choose the next player C, C plays and choose the next player D, ...
-// complex : A+B+C plays and says that the next player is A+B
-'is_sandbox' => false,
-'turnControl' => 'simple'
-
-////////
 );

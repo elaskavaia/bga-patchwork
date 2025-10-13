@@ -2668,3 +2668,9 @@ html.e10.pw_bg_theme {
 #settings-controls-container.settingsControlsHidden {
 	display: none;
 }
+
+#undoredo_wrap {
+  margin-left: 5px;
+  margin-right: 5px;
+  float: right;
+}

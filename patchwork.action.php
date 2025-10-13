@@ -57,6 +57,12 @@ class action_patchwork extends APP_GameAction {
         $this->game->action_advance();
         self::ajaxResponse();
     }
+
+    public function undo() {
+        self::setAjaxMode();
+        $this->game->action_undo();
+        self::ajaxResponse();
+    }
     
     public function endGame() {
         self::setAjaxMode();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
@@ -47,21 +48,22 @@
  * method).
  */
 //    !! It is not a good idea to modify this file when a game is running !!
-if ( !defined('STATE_END_GAME')) { // guard since this included multiple times
-    define("STATE_PLAYER_TURN", 2);
-    define("STATE_GAME_TURN_NEXT_PLAYER", 3);
-    define("STATE_PLAYER_GAME_END", 4);
-    define("STATE_PLAYER_PATCHONE", 5);
-    define("STATE_END_GAME", 99);
+if (!defined('STATE_END_GAME')) { // guard since this included multiple times
+        define("STATE_PLAYER_TURN", 2);
+        define("STATE_GAME_TURN_NEXT_PLAYER", 3);
+        define("STATE_PLAYER_GAME_END", 4);
+        define("STATE_PLAYER_PATCHONE", 5);
+        define("STATE_END_GAME", 99);
 }
 
-$machinestates = [    
+$machinestates = [
         1 => [ // The initial state. Please do not modify.
-               "name" => "gameSetup",
-               "description" => "",
-               "type" => "manager",
-               "action" => "stGameSetup",
-               "transitions" => [ "" => STATE_PLAYER_TURN ] ],
+                "name" => "gameSetup",
+                "description" => "",
+                "type" => "manager",
+                "action" => "stGameSetup",
+                "transitions" => ["" => STATE_PLAYER_TURN]
+        ],
         // Game states 
         STATE_PLAYER_TURN => [ // main active player state 
                 "name" => "playerTurn",
@@ -70,11 +72,12 @@ $machinestates = [
                 "type" => "activeplayer",
                 "args" => "arg_playerTurn",
                 "action" => "st_playerTurn",
-                "possibleactions" => [ "place","advance" ],
-                "transitions" => [ 
+                "possibleactions" => ["place", "advance"],
+                "transitions" => [
                         "next" => STATE_GAME_TURN_NEXT_PLAYER,
                         "patchone" => STATE_PLAYER_PATCHONE,
-                        "last" => STATE_PLAYER_GAME_END ] // 
+                        "last" => STATE_PLAYER_GAME_END
+                ] // 
         ],
         STATE_PLAYER_PATCHONE => [ // place special patch
                 "name" => "playerPatchOne",
@@ -82,20 +85,24 @@ $machinestates = [
                 "descriptionmyturn" => clienttranslate('${you} must place special patch'),
                 "type" => "activeplayer",
                 "args" => "arg_playerPatchOne",
-                "possibleactions" => [ "placeSpecial" ],
+                "possibleactions" => ["placeSpecial"],
                 "transitions" => [
                         "next" => STATE_GAME_TURN_NEXT_PLAYER
                 ] //
         ],
         STATE_GAME_TURN_NEXT_PLAYER => [ // next player state
-                "name" => "gameTurnNextPlayer","description" => clienttranslate('Upkeep...'),
+                "name" => "gameTurnNextPlayer",
+                "description" => clienttranslate('Upkeep...'),
                 "type" => "game", //
                 "action" => "st_gameTurnNextPlayer", //
                 "updateGameProgression" => true,
-                "transitions" => [ "next" => STATE_PLAYER_TURN,"loopback" => STATE_GAME_TURN_NEXT_PLAYER,
-                        "last" => STATE_END_GAME ], // STATE_PLAYER_GAME_END TODO remove after, its there to use undo during dev
+                "transitions" => [
+                        "next" => STATE_PLAYER_TURN,
+                        "loopback" => STATE_GAME_TURN_NEXT_PLAYER,
+                        "last" => STATE_END_GAME
+                ], // STATE_PLAYER_GAME_END TODO remove after, its there to use undo during dev
         ],
-    
+
         STATE_PLAYER_GAME_END => [ // active player state for debugging end of game
                 "name" => "playerGameEnd",
                 "description" => clienttranslate('${actplayer} Game is Over'),
@@ -103,16 +110,17 @@ $machinestates = [
                 "type" => "activeplayer",
                 "args" => "arg_playerTurn",
                 "possibleactions" => ["endGame"],
-                "transitions" => ["next" => STATE_END_GAME,"loopback" => STATE_PLAYER_GAME_END ] // 
+                "transitions" => ["next" => STATE_END_GAME, "loopback" => STATE_PLAYER_GAME_END] // 
         ],
         // End of Game states 
         // Final state.
         // Please do not modify (and do not overload action/args methods).
         STATE_END_GAME => [
                 "name" => "gameEnd",
-                "description" => clienttranslate("End of game"),"type" => "manager",
+                "description" => clienttranslate("End of game"),
+                "type" => "manager",
                 "action" => "stGameEnd",
-                "args" => "argGameEnd" ] 
+                "args" => "argGameEnd"
+        ]
 
 ];
-

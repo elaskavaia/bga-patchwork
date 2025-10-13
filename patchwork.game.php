@@ -21,6 +21,7 @@ require_once('modules/tokens.php');
 require_once('modules/EuroGame.php');
 require_once('modules/PwMatrix.php');
 
+define("MAX_AUTO_TURNS", 12);
 
 class patchwork extends EuroGame
 {
@@ -38,6 +39,7 @@ class patchwork extends EuroGame
             array(
                 "end_of_game" => 10,
                 "patchone_trig" => 11,
+                "var_auto_count" => 12,
                 //      ...
                 "theme_variant" => 100,
                 //    "my_second_game_variant" => 101,
@@ -76,6 +78,7 @@ class patchwork extends EuroGame
             $player_id = $this->getActivePlayerId();
             $this->incStat(1, 'turns_number', $player_id);
             $this->incStat(1, 'turns_number');
+            $this->setGameStateValue("var_auto_count", 0);
         } catch (Exception $e) {
             // logging does not actually work in game init :(
             $this->error("Fatal error while creating game");
@@ -183,9 +186,25 @@ class patchwork extends EuroGame
         ]);
     }
 
-    function debug_a()
+    function debug_q()
     {
-        $this->tokens->createToken("tile_special7x7", "mainboard", 0);
+        $current = $this->getCurrentPlayerId();
+
+        $players_basic = $this->loadPlayersBasicInfos();
+        foreach ($players_basic as $player_id => $player_info) {
+            $color = $player_info['player_color'];
+            $this->saction_PayButtons(5, $player_id);
+        }
+        $patches = ['patch_20', 'patch_29', 'patch_17'];
+        for ($i = 2; $i < 5; $i++) {
+            $toks = $this->tokens->getTokensOfTypeInLocation("patch", "market", $i);
+            $this->userAssertTrue("toks " . toJson($toks), count($toks) == 1);
+            $prev = array_shift($toks);
+            $this->tokens->moveToken($prev["key"], 'limbo', $i);
+            $this->tokens->moveToken($patches[$i - 2], 'market', $i);
+        }
+        $newGameDatas = $this->getAllTableDatas();
+        self::notifyAllPlayers('resetInterfaceWithAllDatas', '', $newGameDatas);
     }
 
     /*
@@ -644,6 +663,7 @@ class patchwork extends EuroGame
     {
         $this->checkAction('place');
         $this->adjustedMaterial();
+        $this->setGameStateValue("var_auto_count", 0);
 
         $player_id = $this->getActivePlayerId();
         //$this->notifyWithName('message', clienttranslate('${player_name} plays pick and place action'));
@@ -680,10 +700,17 @@ class patchwork extends EuroGame
 
     function action_advance($auto = false)
     {
-        if ($auto == false) $this->checkAction('advance');
+        $message = clienttranslate('${player_name} plays advance for ${token_div_count} (auto-advance)');
+        if ($auto == false) {
+            $this->checkAction('advance');
+            $this->setGameStateValue("var_auto_count", 0);
+            $message = clienttranslate('${player_name} plays advance for ${token_div_count}');
+        }
         $player_id = $this->getActivePlayerId();
         $time = $this->dbGetAdvance($player_id);
-        $this->saction_GainButtons($time, $player_id, clienttranslate('${player_name} plays advance for ${token_div_count}'));
+
+
+        $this->saction_GainButtons($time, $player_id, $message);
         $this->saction_MoveTime($player_id, $time);
         $patch1 = $this->dbGetPatchOne($player_id);
         if ($patch1) {
@@ -691,6 +718,11 @@ class patchwork extends EuroGame
             return;
         }
         $this->gamestate->nextState('next');
+    }
+
+    function action_undo()
+    {
+        $this->undoRestorePoint();
     }
 
     function action_endGame()
@@ -735,6 +767,16 @@ class patchwork extends EuroGame
         $res += ['advance' => $advance];
         $res += ['buttons' => $buttons];
         $res['canPatch'] = $canUseAny;
+
+        if (!$canUseAny) {
+            $res['patches'] = [];
+            $res['autoturn'] = true;
+            $value = $this->getGameStateValue("var_auto_count", 0);
+            if ($value > MAX_AUTO_TURNS) {
+                $res['autoturn'] = false;
+            }
+            $res['_no_notify'] = true;
+        }
 
         return $res;
     }
@@ -858,12 +900,12 @@ class patchwork extends EuroGame
     function st_playerTurn()
     {
         $args = $this->arg_playerTurn();
-        $canPatch = $args['canPatch'];
-        //$this->warn("st_playerTurn canPatch='".$canPatch."' pl=$player_id ".toJson($args)."|");
-        if (false &&  !$canPatch) {
-            $this->notifyWithName('message', clienttranslate('${player_name} cannot buy any patches, auto-advance triggered'));
+        $autoturn = array_value_get($args, 'autoturn', false);
+
+        if ($autoturn) {
+            $this->incGameStateValue("var_auto_count", 1); // fail safe in case we blow notif limit
             $this->action_advance(true);
-            $this->sendNotifications(); // have to do it so it does not bundle too much
+            //this->sendNotifications(); // have to do it so it does not bundle too much
         }
     }
 
