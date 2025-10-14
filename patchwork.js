@@ -1172,6 +1172,7 @@ define([
     onUpdateActionButtons_playerPatchOne: function (args) {
       this.clientStateArgs.action = "placeSpecial";
       dojo.addClass(args.patchone, "active_slot");
+      this.pm.dragEnd();
       this.pm.beginPickPatch(args.patchone);
       if (gameui.scrollmap) gameui.scrollmap.enableScrolling();
       this.onUpdateActionButtons_client_PickPatch(args);
