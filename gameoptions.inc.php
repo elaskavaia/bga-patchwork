@@ -27,50 +27,57 @@
 $game_options = [
         // note: game variant ID should start at 100 (ie: 100, 101, 102, ...). The maximum is 199.
         100 =>  [
-                'name' => totranslate('Edition'),
+                'name' => clienttranslate('Edition'),
                 'values' => [
-                        0 => ['name' => totranslate('Americana'), 'tmdisplay' => totranslate('Americana') ],
-                        1 => ['name' => totranslate('Original'), 'tmdisplay' => totranslate('Original') ],
-                        2 => ['name' => totranslate('Halloween'), 'tmdisplay' => totranslate('Halloween') ],
-                        3 => ['name' => totranslate('Folklore Poland'), 'tmdisplay' => totranslate('Folklore Poland') ],
-                        4 => ['name' => totranslate('10th Anniversary Edition'), 
-                              'tmdisplay' => totranslate('10th Anniversary Edition')],
+                        0 => ['name' => clienttranslate('Americana'), 'tmdisplay' => clienttranslate('Americana') ],
+                        1 => ['name' => clienttranslate('Original'), 'tmdisplay' => clienttranslate('Original') ],
+                        2 => ['name' => clienttranslate('Halloween'), 'tmdisplay' => clienttranslate('Halloween') ],
+                        3 => ['name' => clienttranslate('Folklore Poland'), 'tmdisplay' => clienttranslate('Folklore Poland') ],
+                        4 => ['name' => clienttranslate('10th Anniversary Edition'), 
+                              'tmdisplay' => clienttranslate('10th Anniversary Edition')],
                         
                 ],
                 'level' => "major",
                 'default' => 4,
-        ], 
-        
+        ],         
 ];
 
 $game_preferences = array(
         100 => array(
-                'name' => totranslate('Market Layout'),
+                'name' => clienttranslate('Market Layout'),
                 'needReload' => true, // after user changes this preference game interface would auto-reload
                 'values' => array(
-                        1 => array( 'name' => totranslate( 'Circle' ), 'cssPref' => 'market_circle' ),
-                        2 => array( 'name' => totranslate( 'Scroll' ), 'cssPref' => 'market_scroll' )
+                        1 => array( 'name' => clienttranslate( 'Circle' ), 'cssPref' => 'market_circle' ),
+                        2 => array( 'name' => clienttranslate( 'Scroll' ), 'cssPref' => 'market_scroll' )
                 ),
                 'default' => 1
         ),
         101 => array(
-                'name' => totranslate('Cost Tags'),
+                'name' => clienttranslate('Cost Tags'),
                 'needReload' => true, // after user changes this preference game interface would auto-reload
                 'values' => array(
-                        1 => array( 'name' => totranslate( 'Market Only' ), 'cssPref' => 'stickers_market' ),
-                        2 => array( 'name' => totranslate( 'Always' ), 'cssPref' => 'stickers_always' )
+                        1 => array( 'name' => clienttranslate( 'Market Only' ), 'cssPref' => 'stickers_market' ),
+                        2 => array( 'name' => clienttranslate( 'Always' ), 'cssPref' => 'stickers_always' )
                 ),
                 'default' => 1
         ),
         102 => array(
-                'name' => totranslate('Background'),
+                'name' => clienttranslate('Background'),
                 'needReload' => true, // after user changes this preference game interface would auto-reload
                 'values' => array(
-                        0 => array( 'name' => totranslate( 'BGA default' ), 'cssPref' => 'pw_bg_bga' ),
-                        1 => array( 'name' => totranslate( 'Thematic' ), 'cssPref' => 'pw_bg_theme' )
+                        0 => array( 'name' => clienttranslate( 'BGA default' ), 'cssPref' => 'pw_bg_bga' ),
+                        1 => array( 'name' => clienttranslate( 'Thematic' ), 'cssPref' => 'pw_bg_theme' )
                 ),
                 'default' => 1
-        )
+        ),
+        103 =>  [
+                'name' => clienttranslate('Auto-advance'),
+                'values' => [
+                        0 => ['name' => clienttranslate('Off')],
+                        1 => ['name' => clienttranslate('On') ],
+                ],
+                'default' => 1,
+        ], 
 );
 
 
