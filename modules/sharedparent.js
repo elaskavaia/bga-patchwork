@@ -1467,6 +1467,7 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui"], function (
       return $("button_done");
     },
     addUndoButton: function () {
+      //return;
       if (
         !$("button_undo") &&
         !this.isSpectator &&
@@ -1495,6 +1496,12 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui"], function (
       console.log("on cancel");
       this.cancelLocalStateEffects();
     },
+
+    isReadOnly: function () {
+      return (
+        this.isSpectator || typeof g_replayFrom != "undefined" || g_archive_mode
+      );
+    },
     // /////////////////////////////////////////////////
     // // Reaction to cometD notifications
     /*
@@ -1516,6 +1523,7 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui"], function (
       dojo.subscribe("scoreAsync", this, "notif_score");
       dojo.subscribe("log", this, "notif_log");
       dojo.subscribe("warning", this, "notif_warning");
+      dojo.subscribe("message_warning", this, "notif_message_warning");
       dojo.subscribe("animate", this, "notif_animate");
       this.notifqueue.setSynchronous("score", 300);
       this.notifqueue.setSynchronous("tokenMoved", 550);
@@ -1523,13 +1531,25 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui"], function (
     },
     notif_warning: function (notif) {
       if (this.instantaneousMode) return;
-      if (typeof g_replayFrom != "undefined") {
+      if (this.isReadOnly()) {
         return;
       }
       notif.args.you = this.divYou();
       var message = this.format_string_recursive(notif.log, notif.args);
       this.showMessage(message, "info");
     },
+
+    notif_message_warning: function (notif) {
+      if (!this.isReadOnly() && !this.instantaneousMode) {
+        notif.args.you = this.divYou();
+        let log = notif.log;
+        if (!log) log = notif.args.message;
+        if (!log) log = "?";
+        var message = this.format_string_recursive(log, notif.args);
+        this.showMessage(_("Warning:") + " " + message, "warning");
+      }
+    },
+
     notif_playerLog: function (notif) {
       // pure log
     },
