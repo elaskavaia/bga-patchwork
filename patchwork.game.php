@@ -272,8 +272,20 @@ class patchwork extends EuroGame
      */
     function getGameProgression()
     {
-        $patchesall = $this->tokens->getTokensInLocation('market');
-        return 100 - 100 * count($patchesall) / 33;
+        $players = $this->loadPlayersBasicInfos();
+
+        $diff = 0;
+        $boardMax = $this->getMaxTime();
+        $oneFinished = false;
+        foreach ($players as $player_id => $info) {
+            $curtime = $this->dbGetTime($player_id);
+            if ($curtime >= $boardMax) $oneFinished = true;
+            $diff += $curtime;
+        }
+
+        $res =  ($diff / 2 / $boardMax) * 100;
+        if ($res < 100 && $oneFinished) return 99;
+        return $res;
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -312,6 +324,12 @@ class patchwork extends EuroGame
     {
         $variant = $this->getGameStateValue("theme_variant");
         return $variant == 4;
+    }
+
+    function isAutoAdvanceOn($player_id)
+    {
+        $pref = (int) $this->userPreferences->get($player_id, 103);
+        return $pref !== 0;
     }
 
     function adjustedMaterial()
@@ -391,7 +409,7 @@ class patchwork extends EuroGame
         $marker = "timemarker_$color";
         $location = $this->tokens->getTokenLocation($marker);
         $num = getPart($location, 1);
-        return $num + 0; //int
+        return (int)$num;
     }
 
     function dbGetAdvance($player_id)
@@ -700,13 +718,16 @@ class patchwork extends EuroGame
 
     function action_advance($auto = false)
     {
+        $player_id = $this->getActivePlayerId();
         $message = clienttranslate('${player_name} plays advance for ${token_div_count} (auto-advance)');
         if ($auto == false) {
             $this->checkAction('advance');
             $this->setGameStateValue("var_auto_count", 0);
             $message = clienttranslate('${player_name} plays advance for ${token_div_count}');
+        } else {
+            $this->notifyWithName("message_warning", '', ['message' => clienttranslate('${player_name} auto-advances'), 'player_name' => $this->getPlayerName($player_id)], $player_id);
         }
-        $player_id = $this->getActivePlayerId();
+
         $time = $this->dbGetAdvance($player_id);
 
 
@@ -769,13 +790,18 @@ class patchwork extends EuroGame
         $res['canPatch'] = $canUseAny;
 
         if (!$canUseAny) {
-            $res['patches'] = [];
             $res['autoturn'] = true;
             $value = $this->getGameStateValue("var_auto_count", 0);
             if ($value > MAX_AUTO_TURNS) {
                 $res['autoturn'] = false;
             }
-            $res['_no_notify'] = true;
+            if (!$this->isAutoAdvanceOn($player_id)) {
+                $res['autoturn'] = false;
+            }
+            if ($res['autoturn'] == true) {
+                $res['_no_notify'] = true;
+                $res['patches'] = [];
+            }
         }
 
         return $res;
