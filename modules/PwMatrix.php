@@ -14,9 +14,10 @@ if (!function_exists('array_key_first')) {
     }
 }
 
-class PwMatrix extends APP_Object{
-
-    function __construct($game) {
+class PwMatrix {
+    private $rotateZ;
+    private $rotateY;
+    function __construct(protected $game) {
         # parent::__construct();
         $this->game = $game;
         $this->rotateZ = [ //
