@@ -1117,6 +1117,7 @@ define([
       this.removeClass("cannot_use");
       this.removeClass("active_slot");
       this.removeClass("practice_mode");
+      $("button_undo")?.remove();
     },
 
     onUpdateActionButtons: function (stateName, args) {
