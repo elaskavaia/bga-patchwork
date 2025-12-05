@@ -190,18 +190,25 @@ class patchwork extends EuroGame
     {
         $current = $this->getCurrentPlayerId();
 
-        $players_basic = $this->loadPlayersBasicInfos();
-        foreach ($players_basic as $player_id => $player_info) {
-            $color = $player_info['player_color'];
-            $this->saction_PayButtons(5, $player_id);
-        }
-        $patches = ['patch_20', 'patch_29', 'patch_17'];
-        for ($i = 2; $i < 5; $i++) {
+        // $players_basic = $this->loadPlayersBasicInfos();
+        // foreach ($players_basic as $player_id => $player_info) {
+        //     $color = $player_info['player_color'];
+        //     $this->saction_PayButtons(5, $player_id);
+        // }
+        // $patches = ['patch_20', 'patch_29', 'patch_17'];
+        // for ($i = 2; $i < 5; $i++) {
+        //     $toks = $this->tokens->getTokensOfTypeInLocation("patch", "market", $i);
+        //     $this->userAssertTrue("toks " . toJson($toks), count($toks) == 1);
+        //     $prev = array_shift($toks);
+        //     $this->tokens->moveToken($prev["key"], 'limbo', $i);
+        //     $this->tokens->moveToken($patches[$i - 2], 'market', $i);
+        // }
+    for ($i = 2; $i < 10; $i++) {
             $toks = $this->tokens->getTokensOfTypeInLocation("patch", "market", $i);
-            $this->userAssertTrue("toks " . toJson($toks), count($toks) == 1);
+
             $prev = array_shift($toks);
+            if (!$prev) continue;
             $this->tokens->moveToken($prev["key"], 'limbo', $i);
-            $this->tokens->moveToken($patches[$i - 2], 'market', $i);
         }
         $newGameDatas = $this->getAllTableDatas();
         self::notifyAllPlayers('resetInterfaceWithAllDatas', '', $newGameDatas);
@@ -574,10 +581,10 @@ class patchwork extends EuroGame
         // shift everything
         $patchesall = $this->tokens->getTokensInLocation('market', null, 'token_state');
         $count = count($patchesall);
-        $right = floor($count / 2) + 1; // right of wooden token
         $upd = [];
         $i = 0;
-        $shift = $pos - 3; //($count - $right)
+        if ($count <= 3) $shift = 3 - $pos;
+        else $shift = $pos - min(3, $count - 3); 
         while ($shift > 0) {
             array_push($patchesall, array_shift($patchesall));
             $shift--;
