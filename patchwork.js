@@ -458,6 +458,7 @@ class PatchManager {
     gameui.clientStateArgs.dropTarget = null;
     gameui.clientStateArgs.token = null;
     this.selectedNode = null;
+    this.mobileNode = null;
   }
 
   restoreOriginalPatch(targetNode) {
@@ -1315,6 +1316,7 @@ define([
       gameui.removeClass("original");
       gameui.removeClass("active_slot");
       this.pm.selectedNode = null;
+      this.pm.mobileNode = null;
 
       gameui.clientStateArgs.rotateZ = this.pm.normalizedRotateAngle(
         gameui.clientStateArgs.rotateZ
