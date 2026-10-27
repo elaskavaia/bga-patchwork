@@ -229,7 +229,7 @@ class PwMatrix {
             for ($j = 0; $j < BOARD_SIZE; $j++) {
                 if (array_key_exists($i, $matrix) && array_key_exists($j, $matrix [$i])) {
                     if ($matrix [$i] [$j] === $value) {
-                        $res [] = "${prefix}${i}_${j}";
+                        $res [] = "{$prefix}{$i}_{$j}";
                     }
                 }
             }

@@ -257,8 +257,8 @@ class patchwork extends EuroGame
             $color = $player_info['player_color'];
             $occupancy = $this->getOccupancyMatrix($color);
             $unoccup_count = $this->getOccupancyEmpty($occupancy);
-            $this->setCounter($result['counters'], "empties_${color}_counter", $unoccup_count);
-            $this->setCounter($result['counters'], "income_${color}_counter", $this->getCurrentIncome($player_info['player_id']));
+            $this->setCounter($result['counters'], "empties_{$color}_counter", $unoccup_count);
+            $this->setCounter($result['counters'], "income_{$color}_counter", $this->getCurrentIncome($player_info['player_id']));
         }
         //$result ['materials'] = $this->materials;
         $result['variants'] = [];
@@ -355,7 +355,7 @@ class patchwork extends EuroGame
             $primary = $vars[0];
             $variant = $vars[1];
             // if variant matches
-            $variant = preg_replace("/t${theme}/", "", $variant, 1);
+            $variant = preg_replace("/t{$theme}/", "", $variant, 1);
             if ($variant !== '') {
                 continue;
             }
@@ -485,7 +485,7 @@ class patchwork extends EuroGame
         $zdir = $state % 4;
         $rotateY = $ydir * 180;
         $rotateZ = $zdir * 90;
-        $rotor = "${rotateZ}_$rotateY";
+        $rotor = "{$rotateZ}_$rotateY";
         return $rotor;
     }
 
@@ -524,7 +524,7 @@ class patchwork extends EuroGame
     function getCurrentIncome($player_id)
     {
         $color = $this->getPlayerColor($player_id);
-        $onboard = $this->tokens->getTokensOfTypeInLocation(null, "square_${color}%");
+        $onboard = $this->tokens->getTokensOfTypeInLocation(null, "square_{$color}%");
         $buttons = 0;
         foreach ($onboard as $token_id => $info) {
             $income = $this->getRulesFor($token_id, 'income');
@@ -548,7 +548,7 @@ class patchwork extends EuroGame
     {
         $rotateZ = $rotateZ % 360;
         $rotateY = $rotateY % 360;
-        $rotor = "${rotateZ}_$rotateY";
+        $rotor = "{$rotateZ}_$rotateY";
         $occupancy = $this->getOccupancyMatrix($color);
         $moves = $this->arg_possibleMoves($token_id, $color, $rotor, $occupancy)[$rotor];
         $valid = array_search($dropTarget, $moves) !== false;
@@ -572,7 +572,7 @@ class patchwork extends EuroGame
         }
         $occupancy = $this->getOccupancyMatrix($color);
         $unoccup_count = $this->getOccupancyEmpty($occupancy);
-        $this->notifyCounterDirect("empties_${color}_counter", $unoccup_count, '');
+        $this->notifyCounterDirect("empties_{$color}_counter", $unoccup_count, '');
     }
 
     function saction_MoveNeutralToken($pos)
@@ -846,7 +846,7 @@ class patchwork extends EuroGame
     function arg_occupancyData($color)
     {
         $this->adjustedMaterial();
-        $tokens = $this->tokens->getTokensOfTypeInLocation("patch", "square_${color}%");
+        $tokens = $this->tokens->getTokensOfTypeInLocation("patch", "square_{$color}%");
         //$this->warn(toJson($tokens));
         $occupdata = [];
         foreach ($tokens as $key => $info) {
@@ -884,7 +884,7 @@ class patchwork extends EuroGame
     {
         $this->adjustedMaterial();
         if ($color !== null) {
-            $prefix = "square_${color}_";
+            $prefix = "square_{$color}_";
         } else
             $prefix = '';
 

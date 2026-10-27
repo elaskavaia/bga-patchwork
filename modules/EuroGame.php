@@ -105,11 +105,11 @@ abstract class EuroGame extends APP_Extended {
             $counter = $info ['counter'] ?? 0;
             if (array_key_exists('loc', $info) && $info ['loc'] && $counter == 1) {
                 if ($info ['loc'] == 1) {
-                    $this->setCounter($res, "${key}_counter", 0);
+                    $this->setCounter($res, "{$key}_counter", 0);
                 } else  if ($info ['loc'] == 2) {
                     foreach ( $players_basic as $player_id => $player_info ) {
                         $color = $player_info ['player_color'];               
-                        $this->setCounter($res, "${key}_${color}_counter", 0);
+                        $this->setCounter($res, "{$key}_{$color}_counter", 0);
                     }
                 }
             }
