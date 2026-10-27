@@ -46,7 +46,7 @@ class patchwork extends EuroGame
                 //      ...
             )
         );
-        $this->tokens = new Tokens();
+        $this->tokens = new Tokens($this);
         $this->matrix = new PwMatrix($this);
     }
 
