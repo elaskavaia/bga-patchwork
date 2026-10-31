@@ -639,6 +639,9 @@ define(["dojo", "dojo/_base/declare", "ebg/core/gamegui"], function (
       return true;
     },
     isActiveSlot: function (id) {
+      if (!$(id)) {
+        return false;
+      }
       if (dojo.hasClass(id, "active_slot")) {
         return true;
       }

@@ -53,12 +53,15 @@ Internal record (root cause, fix, test) - never put this detail in a public bug 
 
 ## Auto errors (no report)
 
-- JS `Cannot read properties of null (reading 'className')`, culprit `onDone` ->
-  `isActiveSlot` (modules/sharedparent.js) calling `dojo.hasClass` on a missing
-  `clientStateArgs.dropTarget`. Many issue ids (702576, 715017, 736608, 702265, 736609, 714428,
-  726092, 751024, 728547, 753772...), roughly 300+ events in 30 days, still firing on 261028-0058
-  (751024: 19 events / 13 users). Effect: Confirm silently does nothing instead of showing
-  "Illegal patch location". May explain old "can't confirm my patch" reports.
+- [x] JS `Cannot read properties of null (reading 'className')`, culprit `onDone` ->
+  `isActiveSlot` (modules/sharedparent.js) calling `dojo.hasClass` on a null
+  `clientStateArgs.dropTarget`. Same stack in Safari `null is not an object (evaluating
+  'n.byId(e)[o]')` (718018) and Firefox `can't access property "className", n.byId(...) is null`
+  (738207). Other ids: 702576, 715017, 736608, 702265, 736609, 714428, 726092, 751024, 728547,
+  753772. Trigger: select a patch, click the board's done control before placing it.
+  FIXED (client-side, not test-covered): `isActiveSlot` returns false when the element is
+  missing, so Confirm shows "Illegal patch location". Verified in Studio: repro path crashed
+  before, shows the message after; valid placement + Confirm still works. Not yet deployed.
 - PHP `The stored UNDO corresponds to another player's turn` - framework undo exception, every
   release (725399, 714828, 703106, 750167: ~300 events, ~250 users). Not investigated.
 
