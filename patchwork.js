@@ -1308,6 +1308,7 @@ define([
     onDone: function () {
       var token = gameui.clientStateArgs.token;
       var id = gameui.clientStateArgs.dropTarget;
+      if (!id) return;
       if (!gameui.isActiveSlot(id)) {
         if (!this.practiceMode) gameui.showError(_("Illegal patch location"));
         return;

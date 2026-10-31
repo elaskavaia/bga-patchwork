@@ -58,10 +58,12 @@ Internal record (root cause, fix, test) - never put this detail in a public bug 
   `clientStateArgs.dropTarget`. Same stack in Safari `null is not an object (evaluating
   'n.byId(e)[o]')` (718018) and Firefox `can't access property "className", n.byId(...) is null`
   (738207). Other ids: 702576, 715017, 736608, 702265, 736609, 714428, 726092, 751024, 728547,
-  753772. Trigger: select a patch, click the board's done control before placing it.
-  FIXED (client-side, not test-covered): `isActiveSlot` returns false when the element is
-  missing, so Confirm shows "Illegal patch location". Verified in Studio: repro path crashed
-  before, shows the message after; valid placement + Confirm still works. Not yet deployed.
+  753772. Trigger: fast double-click on Confirm (the first click clears `clientStateArgs`, the
+  button stays until the state changes); the board done control is already hidden until a patch
+  is placed. FIXED (client-side, not test-covered): `isActiveSlot` returns false when the
+  element is missing, and `onDone` ignores clicks with no drop target. Verified in Studio:
+  double-click Confirm showed "Illegal patch location", now sends one move with no error; done
+  click before placing does nothing; practice mode never offers done. Not yet deployed.
 - PHP `The stored UNDO corresponds to another player's turn` - framework undo exception, every
   release (725399, 714828, 703106, 750167: ~300 events, ~250 users). Not investigated.
 
