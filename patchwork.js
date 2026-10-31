@@ -1309,8 +1309,9 @@ define([
       var token = gameui.clientStateArgs.token;
       var id = gameui.clientStateArgs.dropTarget;
       if (!id) return;
+      if (this.isPracticeMode()) return;
       if (!gameui.isActiveSlot(id)) {
-        if (!this.practiceMode) gameui.showError(_("Illegal patch location"));
+        gameui.showError(_("Illegal patch location"));
         return;
       }
       dojo.destroy(token + "_temp");
