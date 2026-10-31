@@ -67,6 +67,11 @@ html.e10.pw_bg_theme {
 
 .player-board {
 	background-color: #e2e7c2c2;
+	color: #000;
+}
+
+.player-board.roundedboxdisabled {
+	background-color: #dac6af;
 }
 
 .pworiginal .player-board {
