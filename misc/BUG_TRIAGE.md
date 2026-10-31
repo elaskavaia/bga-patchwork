@@ -27,6 +27,8 @@ time; the last commit before it is live:
 ancestor of that commit. Fix commits reference `BGA #<id>`.
 
 - 2026-10-31: live version 261028-0058; HEAD fb8bf62 (2026-10-27 19:45 EDT) is live.
+- Tag v261031-2033 was built in Studio but NOT deployed (BGA gameserver unavailable); a tag here
+  does not prove deployment, check the gamepanel version.
 
 ## Investigation and tests
 
